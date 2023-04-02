@@ -68,7 +68,8 @@ async def main(phone):
     total_count_limit = 0
 
     while True:
-        print("Current Offset ID is:", offset_id, "; Total Messages:", total_messages)
+        print("Current Offset ID is:", offset_id,
+          "; Total Messages:", total_messages)
         history = await client(GetHistoryRequest(
             peer=my_channel,
             offset_id=offset_id,
@@ -83,13 +84,15 @@ async def main(phone):
             break
         messages = history.messages
         for message in messages:
-            all_messages.append(message.to_dict())
+            message_dict = {'data': message.date.isoformat(),'message': message.message}
+            all_messages.append(message_dict)
         offset_id = messages[len(messages) - 1].id
         total_messages = len(all_messages)
+    
         if total_count_limit != 0 and total_messages >= total_count_limit:
             break
 
-    with open('channel_messages.json', 'w') as outfile:
+    with open('channel-messages.json', 'w') as outfile:
         json.dump(all_messages, outfile, cls=DateTimeEncoder)
 
 with client:
