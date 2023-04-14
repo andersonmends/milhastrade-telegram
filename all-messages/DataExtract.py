@@ -1,7 +1,7 @@
 import json
 import re
 
-# extrai os dados relevantes (HM, Max, Latam, Gol e Azul) do arquivo retirado
+# passo 2 - extrai os dados relevantes (HM, Max, Latam, Gol e Azul) do arquivo retirado do
 # canal do telegran e coloca em outro arquivo json com o nome dados limpos
 
 # Abrir o arquivo JSON

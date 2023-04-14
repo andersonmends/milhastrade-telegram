@@ -1,5 +1,8 @@
 import json
 
+# passo 4 - deixa os dados pronto, ou seja, cria no json objetos unicos com o valor máximo
+# do array das cias, deixanod assim mais clean
+
 with open('dados-processados.json', 'r') as f:
     data = json.load(f)
 

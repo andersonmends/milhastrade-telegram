@@ -1,5 +1,9 @@
 import json
 
+#passo 5 - ordenas os dados por data para pode usar o json no node.js
+#a partir do momento que esse dados for para o bd não é mais necessário esse passo
+# esse foi criado como uma forma de simplificar, poderia ter sido feito inclusive no proprio codigo da aplicação
+
 with open('dados-ready.json', 'r') as f:
     data = json.load(f)
 

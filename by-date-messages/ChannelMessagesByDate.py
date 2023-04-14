@@ -1,15 +1,14 @@
 import configparser
 import json
 import asyncio
-from datetime import date, datetime
+from datetime import datetime, timedelta
 
 from telethon import TelegramClient
 from telethon.errors import SessionPasswordNeededError
-from telethon.tl.functions.messages import (GetHistoryRequest)
-from telethon.tl.types import (
-    PeerChannel
-)
+from telethon.tl.functions.messages import GetHistoryRequest
+from telethon.tl.types import PeerChannel
 
+# extrai as mensagens do grupo do telegram a partir da data X
 
 # some functions to parse json date
 class DateTimeEncoder(json.JSONEncoder):
@@ -21,7 +20,6 @@ class DateTimeEncoder(json.JSONEncoder):
             return list(o)
 
         return json.JSONEncoder.default(self, o)
-
 
 # Reading Configs
 config = configparser.ConfigParser()
@@ -35,6 +33,7 @@ api_hash = str(api_hash)
 
 phone = config['Telegram']['phone']
 username = config['Telegram']['username']
+url = config['Telegram']["channel_url"]
 
 # Create the client and connect
 client = TelegramClient(username, api_id, api_hash)
@@ -52,7 +51,7 @@ async def main(phone):
 
     me = await client.get_me()
 
-    user_input_channel = input('enter entity(telegram URL or entity id):')
+    user_input_channel = url
 
     if user_input_channel.isdigit():
         entity = PeerChannel(int(user_input_channel))
@@ -61,6 +60,8 @@ async def main(phone):
 
     my_channel = await client.get_entity(entity)
 
+    start_date = datetime(2023, 3, 25, 0, 0)  # replace with your desired date
+
     offset_id = 0
     limit = 100
     all_messages = []
@@ -68,8 +69,7 @@ async def main(phone):
     total_count_limit = 0
 
     while True:
-        print("Current Offset ID is:", offset_id,
-          "; Total Messages:", total_messages)
+        print("Current Offset ID is:", offset_id, "; Total Messages:", total_messages)
         history = await client(GetHistoryRequest(
             peer=my_channel,
             offset_id=offset_id,
@@ -82,13 +82,20 @@ async def main(phone):
         ))
         if not history.messages:
             break
+        
         messages = history.messages
+        
+        # Filtering messages to get only those that match the date criteria
         for message in messages:
-            message_dict = {'data': message.date.isoformat(),'message': message.message}
-            all_messages.append(message_dict)
-        offset_id = messages[len(messages) - 1].id
+            if message.date.date() >= start_date.date():
+                message_dict = {'data': message.date.isoformat(), 'message': message.message}
+                all_messages.append(message_dict)
+            else:
+                break  # We reached the end of the messages that match the criteria, so we can stop the loop
+        
+        offset_id = messages[-1].id
         total_messages = len(all_messages)
-    
+        
         if total_count_limit != 0 and total_messages >= total_count_limit:
             break
 

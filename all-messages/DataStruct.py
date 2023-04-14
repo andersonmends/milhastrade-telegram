@@ -1,5 +1,9 @@
 import json
 
+# passo 3 - processa os dados do arquivo dados-limpos de forma que agora eles 
+# fiquem estruturado em json com chave e valor, com data, nome da empresa de 
+# compras e o nome das cias com seus resptivos valores em um array
+
 with open('dados-limpos.json', 'r') as f:
     data = json.load(f)
 
