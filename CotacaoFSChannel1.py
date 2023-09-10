@@ -34,7 +34,7 @@ api_hash = str(api_hash)
 
 phone = config['Telegram']['phone']
 username = config['Telegram']['username']
-channel_url = config['Telegram']["channel_url"]
+channel_url = config['Telegram']["channel_url1"]
 
 # Create the client and connect
 client = TelegramClient(username, api_id, api_hash)
@@ -62,7 +62,7 @@ async def main(phone):
     my_channel = await client.get_entity(entity)
 
     # replace with your desired date, for all messages set data before telegram channel
-    start_date = datetime(2018, 3, 25, 0, 0)  
+    start_date = datetime(2018, 6, 1, 0, 0)   
     
 
     offset_id = 0
@@ -72,7 +72,7 @@ async def main(phone):
     total_count_limit = 0
 
     while True:
-        print("Current Offset ID is:", offset_id, "; Total Messages:", total_messages)
+        # print("Current Offset ID is:", offset_id, "; Total Messages:", total_messages)
         history = await client(GetHistoryRequest(
             peer=my_channel,
             offset_id=offset_id,
@@ -136,9 +136,10 @@ async def main(phone):
         if total_count_limit != 0 and total_messages >= total_count_limit:
             break
         
-    # ready_data.reverse() ##to reverse data extract order
+    print("Total Messages:", total_messages)
+    # print(all_messages)
 
-    with open('channel-messages.json', 'w') as outfile:
+    with open('channel-messages1.json', 'w') as outfile:
         json.dump(ready_data, outfile, cls=DateTimeEncoder)
 
 with client:

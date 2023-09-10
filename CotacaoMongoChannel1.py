@@ -14,17 +14,6 @@ from os.path import join
 from urllib.parse import quote
 
 
-# some functions to parse json date
-class DateTimeEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, datetime):
-            return o.isoformat()
-
-        if isinstance(o, bytes):
-            return list(o)
-
-        return json.JSONEncoder.default(self, o)
-
 
 # Reading Configs
 config = configparser.ConfigParser()
@@ -42,8 +31,8 @@ phone = config['Telegram']['phone']
 # phone = os.environ.get('phone')
 username = config['Telegram']['username']
 # username = os.environ.get('username')
-channel_url = config['Telegram']['channel_url']
-# url = os.environ.get('channel_url')
+channel_url = config['Telegram']['channel_url1']
+# channel_url = os.environ.get('channel_url1')
 
 session_string = config['Telegram']['session_string']
 # session_string = os.environ.get('session_string')
@@ -77,7 +66,7 @@ async def main(phone):
     my_channel = await client.get_input_entity(entity)
 
     # replace with your desired date, for all messages set data before telegram channel
-    start_date = datetime(2023, 6, 3, 0, 0)
+    start_date = datetime(2020, 6, 3, 0, 0)
     # start_date = datetime.now()
     print(start_date)
 
